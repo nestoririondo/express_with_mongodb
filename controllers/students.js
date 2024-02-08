@@ -5,7 +5,7 @@ export const getStudents = async (req, res) => {
     const data = await Student.find();
     res.status(200).json(data);
   } catch (error) {
-    res.sendStatus(500);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -23,16 +23,28 @@ export const postStudent = async (req, res) => {
   }
 };
 
+// export const updateJohn = async (req, res) => {
+//   try {
+//     const data = await Student.find({ first_name: "John" });
+//     const arrayOfPromises = data.map((john) =>
+//       Student.findByIdAndUpdate(john._id, { first_name: "Bob" }, { new: true })
+//     );
+//     const results = await Promise.all(arrayOfPromises);
+//     results.length === 0
+//       ? res.status(404).json({ message: "No John found" })
+//       : res.status(200).json(results);
+//   } catch (error) {
+//     res.status(409).json({ message: error.message });
+//   }
+// };
+
 export const updateJohn = async (req, res) => {
   try {
-    const data = await Student.find({ first_name: "John" });
-    const arrayOfPromises = data.map((john) =>
-      Student.findByIdAndUpdate(john._id, { first_name: "Bob" }, { new: true })
+    const data = await Student.updateMany(
+      { first_name: "John" },
+      { first_name: "Bob" },
     );
-    const results = await Promise.all(arrayOfPromises);
-    results.length === 0
-      ? res.status(404).json({ message: "No John found" })
-      : res.status(200).json(results);
+    res.status(200).json(data);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
