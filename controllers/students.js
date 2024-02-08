@@ -42,9 +42,11 @@ export const updateJohn = async (req, res) => {
   try {
     const data = await Student.updateMany(
       { first_name: "John" },
-      { first_name: "Bob" },
+      { first_name: "Bob" }
     );
-    res.status(200).json(data);
+    data.modifiedCount === 0
+      ? res.status(404).json({ message: "No John found" })
+      : res.status(200).json(data);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
