@@ -1,7 +1,5 @@
 import Country from "../models/Country.js";
-
-const ALPHA2CODE_REGEX = /^[A-Z]{2}$/;
-const ALPHA3CODE_REGEX = /^[A-Z]{3}$/;
+import { validateRegex } from "../utils/strings.js";
 
 export const checkCode = async (req, res, next) => {
   const { code } = req.params;
@@ -10,7 +8,7 @@ export const checkCode = async (req, res, next) => {
       .status(400)
       .json({ message: "Either alpha2Code or alpha3Code required." }); // 400 Bad Request
 
-  if (!ALPHA2CODE_REGEX.test(code) && !ALPHA3CODE_REGEX.test(code))
+  if (!validateRegex(code, "alpha2Code") && !validateRegex(code, "alpha3Code"))
     return res.status(400).json({ message: "Invalid code." });
 
   next();
@@ -53,9 +51,9 @@ export const checkNewData = async (req, res, next) => {
 
   if (typeof name !== "string")
     return res.status(400).json({ message: "Name should be a string." });
-  if (!ALPHA2CODE_REGEX.test(alpha2Code))
+  if (!validateRegex(alpha2Code, "alpha2Code"))
     return res.status(400).json({ message: "Invalid alpha2Code." });
-  if (!ALPHA3CODE_REGEX.test(alpha3Code))
+  if (!validateRegex(alpha3Code, "alpha3Code"))
     return res.status(400).json({ message: "Invalid alpha3Code." });
   if (visited && typeof visited !== "boolean")
     return res
