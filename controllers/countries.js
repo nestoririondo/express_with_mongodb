@@ -11,6 +11,8 @@ export const getCountries = async (req, res) => {
     data =
       visited === "true"
         ? data.filter((country) => country.visited === true)
+        : visited === "false"
+        ? data.filter((country) => country.visited === false)
         : data;
 
     data.length > 0
@@ -48,25 +50,17 @@ export const putCountry = async (req, res) => {
   }
 };
 
-export const deleteCountry = async (req, res) => {
+export const changeVisited = async (req, res) => {
   try {
-    const data = await Country.findOneAndDelete(req.country);
-    res.status(204).json(data); // 204 No Content
+    const data = await Country.findOneAndUpdate(
+      { _id: req.country._id },
+      { visited: !req.country.visited },
+      { new: true }
+    );
+
+    res.json(data); // 204 No Content
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
-
-// 5. DELETE /api/countries/:code
-
-// This route should allow you to delete a specific country from the list (eg: remove an object from the array)
-
-// BONUS: you’ve changed your mind; what if you segmented your countries into two categories? One that would be “already visited” and the other which would be “to visit”?
-
-// In that case hitting the delete endpoint would just change that specific flag in your country object instead of completely removing it from the array.
-
-// To achieve this properly; you will also need to:
-// – Edit your country objects to add a visited boolean flag
-// – Update your validation logic to take this into account for the POST and PUT routes
-// – Edit the get all countries routes so that you can pass a visited=true query string, on top of the sorting one, to filter and return countries by their status
