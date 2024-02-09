@@ -22,11 +22,9 @@ export const checkCountryExists = async (req, res, next) => {
 
   try {
     const country = await Country.findOne(query);
-    if (!country)
-      return res.status(404).json({ message: "Country not found." });
-
-    req.country = country;
-    next();
+    !country
+      ? res.status(404).json({ message: "Country not found." })
+      : ((req.country = country), next());
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,27 +36,32 @@ export const checkCountryShouldNotExist = async (req, res, next) => {
 
   try {
     const country = await Country.findOne(query);
-    if (country)
-      return res.status(400).json({ message: "Country already exists." });
-
-    next();
+    country
+      ? res.status(400).json({ message: "Country already exists." })
+      : next();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const checkPostCountry = async (req, res, next) => {
-  const { name, alpha2Code, alpha3Code } = req.body;
+export const checkNewData = async (req, res, next) => {
+  const { name, alpha2Code, alpha3Code, visited } = req.body;
   if (!name || !alpha2Code || !alpha3Code)
     return res
       .status(400)
       .json({ message: "Name, alpha2Code and alpha3Code required." }); // 400 Bad Request
 
+  if (typeof name !== "string")
+    return res.status(400).json({ message: "Name should be a string." });
   if (!ALPHA2CODE_REGEX.test(alpha2Code))
     return res.status(400).json({ message: "Invalid alpha2Code." });
   if (!ALPHA3CODE_REGEX.test(alpha3Code))
     return res.status(400).json({ message: "Invalid alpha3Code." });
+  if (visited && typeof visited !== "boolean")
+    return res
+      .status(400)
+      .json({ message: "Visited should be true or false." });
 
-  req.country = { name, alpha2Code, alpha3Code };
+  req.country = { name, alpha2Code, alpha3Code, visited };
   next();
 };
