@@ -16,7 +16,9 @@ export const getCountries = async (req, res) => {
   }
 };
 
-export const getCountry = async (req, res) => {};
+export const getCountry = async (req, res) => {
+  res.json(req.country);
+};
 
 export const postCountry = async (req, res) => {
   try {
