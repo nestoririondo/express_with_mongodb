@@ -8,6 +8,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/students", studentsRouter);
 app.use("/countries", countriesRouter);

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
+
+    <main>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="jumbotron">
+            <h1>Add countries to wishlist</h1>
+            <form action="/countries/api" method="post">
+              <label for="name">Name:</label><br />
+              <input type="text" id="name" name="name" /><br />
+              <label for="alpha2Code">Alpha-2 Code:</label><br />
+              <input type="text" id="alpha2Code" name="alpha2Code" /><br />
+              <label for="alpha3Code">Alpha-3 Code:</label><br />
+              <input type="text" id="alpha3Code" name="alpha3Code" /><br />
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer><%- include('../partials/footer'); %></footer>
+  </body>
+</html>

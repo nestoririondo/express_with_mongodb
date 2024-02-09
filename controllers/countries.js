@@ -24,6 +24,24 @@ export const getCountries = async (req, res) => {
   }
 };
 
+export const getCountriesAsData = async (visited) => {
+  try {
+    let data = await Country.find();
+
+    data =
+      visited === "true"
+        ? data.filter((country) => country.visited === true)
+        : visited === "false"
+        ? data.filter((country) => country.visited === false)
+        : data;
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const getCountry = async (req, res) => {
   res.json(req.country);
 };
