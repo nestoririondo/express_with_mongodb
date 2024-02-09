@@ -1,13 +1,13 @@
 import express from 'express';
 import { getCountries, getCountry, postCountry, putCountry, deleteCountry } from '../controllers/countries.js'
-import { checkPostCountry, checkCountryExists, checkGetCountry } from '../middlewares/countries.js';
+import { checkPostCountry, checkCountryShouldNotExist, checkCountryExists, checkCode } from '../middlewares/countries.js';
 
 const countriesRouter = express.Router();
 
 countriesRouter.get('/', getCountries)
-countriesRouter.get('/:code', checkGetCountry, checkCountryExists(true), getCountry)
-countriesRouter.post('/', checkPostCountry, checkCountryExists(false), postCountry)
-countriesRouter.put('/:code', putCountry)
+countriesRouter.get('/:code', checkCode, checkCountryExists, getCountry)
+countriesRouter.post('/', checkPostCountry, checkCountryShouldNotExist, postCountry)
+countriesRouter.put('/:code', checkCode, checkPostCountry, checkCountryExists, putCountry)
 countriesRouter.delete('/:code', deleteCountry)
 // add middleware to check for code
 
