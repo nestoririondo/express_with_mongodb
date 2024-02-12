@@ -11,6 +11,7 @@ const StudentSchema = new mongoose.Schema({
       message: "Invalid email format",
     },
   },
+  country: { required: true, type: String },
 });
 
 const Student = mongoose.model("Student", StudentSchema);

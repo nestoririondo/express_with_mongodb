@@ -41,6 +41,7 @@ export const checkCountryExists = async (req, res, next) => {
 
 export const checkNewData = async (req, res, next) => {
   const { name, alpha2Code, alpha3Code, visited } = req.body;
+  console.log(name, alpha2Code, alpha3Code)
   if (!name || !alpha2Code || !alpha3Code)
     return res
       .status(400)
@@ -59,7 +60,7 @@ export const checkNewData = async (req, res, next) => {
   next();
 };
 
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res) => {
   console.error(err);
   res.status(500).json({ message: err.message });
 };

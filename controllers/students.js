@@ -10,11 +10,8 @@ export const getStudents = async (req, res) => {
 };
 
 export const postStudent = async (req, res) => {
-  const { first_name, last_name, email } = req.body;
-  const newStudent = {};
-  if (first_name) newStudent.first_name = first_name;
-  if (last_name) newStudent.last_name = last_name;
-  if (email) newStudent.email = email;
+  const { first_name, last_name, email, country } = req.body;
+  const newStudent = { first_name, last_name, email, country };
   try {
     const data = await Student.create(newStudent);
     res.status(201).json(data);
@@ -22,6 +19,13 @@ export const postStudent = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 };
+
+// Provide a view that allows the user to create a new student by providing
+// the name, first_name, email and country (new). The country should
+// already exist in your countries collection, so you need to find a way to
+// fetch the list and display it as options to select a specific country. After new
+// student creation, the list of students should be updated showing the new
+// student created.
 
 // export const updateJohn = async (req, res) => {
 //   try {
@@ -49,5 +53,15 @@ export const updateJohn = async (req, res) => {
       : res.status(200).json(data);
   } catch (error) {
     res.status(409).json({ message: error.message });
+  }
+};
+
+export const deleteStudent = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const data = await Student.findByIdAndDelete({ _id: id });
+    res.json(data);
+  } catch (error) {
+    next(error);
   }
 };

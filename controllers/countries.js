@@ -1,6 +1,7 @@
 import Country from "../models/Country.js";
 
 export const getCountries = async (req, res, next) => {
+  console.log("GetCountries attempt.");
   const { sort, visited } = req.query;
   try {
     const data = await Country.find(visited ? { visited } : {}).sort(
@@ -37,11 +38,12 @@ export const getCountry = async (req, res) => {
 };
 
 export const postCountry = async (req, res, next) => {
+  console.log("Post attempt.");
   try {
     const data = await Country.create(req.newCountry);
-    res.status(201).json(data);
+    res.status(201).json({ message: "Country created successfully." });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -50,6 +52,15 @@ export const putCountry = async (req, res, next) => {
     const data = await Country.findOneAndUpdate(req.country, req.newCountry, {
       new: true,
     });
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteCountry = async (req, res, next) => {
+  try {
+    const data = await Country.findByIdAndDelete(req.country);
     res.json(data);
   } catch (error) {
     next(error);
