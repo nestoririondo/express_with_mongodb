@@ -15,20 +15,17 @@ export const checkData = (req, res, next) => {
 
 export const authenticate = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log("auth try", authHeader)
+  console.log("auth try", authHeader);
   if (!authHeader)
     return res.status(401).json({ message: "Authorization header required." });
 
   const token = authHeader.split(" ")[1];
   if (!token) return res.status(401).json({ message: "Token required." });
 
-  try {
-    const user = jwt.verify(token, SECRET_TOKEN, (err, user) => {
-      if (err) return res.status(403).json({ message: "Invalid token." });
-      req.user = user;
-      next();
-    });
-  } catch (error) {
-    res.status(403).json({ message: "Invalid token." });
-  }
+  jwt.verify(token, SECRET_TOKEN, (err, user) => {
+    if (err) return res.sendStatus(403);
+    console.log(user, 'token decoded')
+    req.user = user;
+    next();
+  });
 };
