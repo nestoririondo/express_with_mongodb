@@ -4,9 +4,9 @@ export const getCountries = async (req, res, next) => {
   console.log("GetCountries attempt.");
   const { sort, visited } = req.query;
   try {
-    const data = await Country.find(visited ? { visited } : {}).sort(
-      sort ? { name: 1 } : {}
-    );
+    const data = await Country
+    .find(visited ? { visited } : {})
+    .sort(sort ? { name: 1 } : {});
 
     data.length > 0
       ? res.json(data)
